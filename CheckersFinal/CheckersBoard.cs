@@ -8,8 +8,8 @@ namespace CheckersFinal
 {
     class CheckersBoard
     {
-        Cell[,] cells;
-
+        public Cell[,] cells;
+        public bool jumpneed;
         public CheckersBoard()
         {
             CreateCells();
@@ -120,13 +120,10 @@ namespace CheckersFinal
         {
             StringBuilder builder = new StringBuilder();
 
-
             for (int x = 1; x <= 8; x++)
             {
                 builder.Append(Utilities.GetXLetter(x));
-                Console.Write(Utilities.GetXLetter(x));
             }
-            Console.Write("\n");
             builder.Append("\n");
             for (int i = 0; i < 8; i++)
             {
@@ -134,23 +131,43 @@ namespace CheckersFinal
                 for (int j = 0; j < 8; j++)
                 {
                     builder.Append(Utilities.GetIcon(cells[i, j]));
-                    Console.Write(Utilities.GetIcon(cells[i, j]));
                 }
-                Console.Write((i + 1)+"\n");
                 builder.Append((i + 1) + "\n");
             }
-
-
-            Console.WriteLine("\n");
-            
             return builder.ToString();
         }
         public void MakeMove(string checkerName, string cell2move)
         {
+            if(jumpneed==true)
+            {
+                if (GetCell(cell2move).available2fight==true)
+                {
+
+                }
+                else
+            }
+            else
+            {
+
+            }
 
 
+        }
+        public ref Cell GetCell( string cellName)
+        {
+            for (int i = 0; i < 8; i++)
+            {
+                for (int j = 0; j < 8; j++)
+                {
+                    if (cells[i, j].name == cellName)
+                    {
+                        return ref cells[i, j];
+                    }
 
-
+                }
+            }
+            Console.WriteLine("Ошибка, клетки с таким именем не существует");
+            return ref cells[0, 0]; //костыль
         }
 
     }

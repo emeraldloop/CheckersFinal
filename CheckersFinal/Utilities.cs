@@ -8,7 +8,7 @@ namespace CheckersFinal
 {
     static class Utilities
     {
-        static bool jumpneed;
+       
         public static string GetXLetter(int x)
         {
             string letter;
@@ -47,35 +47,35 @@ namespace CheckersFinal
         }
         public static char GetIcon(Cell cell)
         {
-            if(cell.available == false && cell.checker==null) 
+            if (cell.available == false && cell.checker == null)
             {
                 return '\u25A0';
             }
-            if (cell.available==true && cell.checker ==null )
+            if (cell.available == true && cell.checker == null)
             {
                 return '_';
             }
 
-            if(cell.checker!=null && cell.checker.team=="white")
+            if (cell.checker != null && cell.checker.team == "white")
             {
                 return 'W';
             }
-            if (cell.checker!=null && cell.checker.team =="black")
+            if (cell.checker != null && cell.checker.team == "black")
             {
                 return 'B';
             }
 
-        return '?';
+            return '?';
         }
-        public static bool Check1stClick(string team,ref CheckersBoard board,string checkerName)
+        public static bool Check1stClick(string team, ref CheckersBoard board, string checkerName)
         {
-            jumpneed = false;
-            if (CheckTeam(checkerName)==true)
+            board.jumpneed = false;
+            if (CheckTeam(GetCell(ref board,checkerName),team) == true)
             {
-                if(CheckFights(board)==true)
+                if (CheckFights(board) == true)
                 {
-                    jumpneed = true;
-                    if (CheckPossibility2Fight(checkerName)==true)
+                    board.jumpneed = true;
+                    if (CheckPossibility2Fight(checkerName) == true)
                     {
                         Console.WriteLine("Вы должны есть этой шашкой");
                         return true;
@@ -88,7 +88,7 @@ namespace CheckersFinal
                 }
                 else
                 {
-                    jumpneed = false;
+                    board.jumpneed = false;
                     if (CheckPossibility2Move(checkerName) == true)
                     {
                         Console.WriteLine("Эта шашка может ходить");
@@ -103,9 +103,9 @@ namespace CheckersFinal
             }
             return false;
         }
-        public static bool Check2ndClick(string team,ref CheckersBoard board, string checkerName, string cellName)
+        public static bool Check2ndClick(string team, ref CheckersBoard board, string checkerName, string cellName)
         {
-            if (jumpneed==true && CheckCell2Move(cellName)==true)
+            if (board.jumpneed == true && CheckCell2Move(cellName) == true)
             {
                 return true;
             }
@@ -113,17 +113,15 @@ namespace CheckersFinal
             {
                 return false;
             }
-            
+
         }
-       
-        static bool CheckTeam(string checkername)
+
+        static bool CheckTeam(Cell cell,string team)
         {
-
-
-
-
-
-            return true;
+            if (cell.checker.team == team)
+                return true;
+            else
+                return false;
         }
 
         static bool CheckFights(CheckersBoard board)
@@ -144,5 +142,23 @@ namespace CheckersFinal
         {
             return true;
         }
+
+        public static ref Cell GetCell(ref CheckersBoard board, string cellName)
+        {
+            for (int i = 0; i < 8; i++)
+            {
+                for (int j = 0; j < 8; j++)
+                {
+                    if (board.cells[i, j].name == cellName)
+                    {
+                        return ref board.cells[i, j];
+                    }
+
+                }
+            }
+            Console.WriteLine("Ошибка, клетки с таким именем не существует");
+            return ref board.cells[0, 0]; //костыль
+        }
+
     }
 }
