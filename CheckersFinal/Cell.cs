@@ -14,9 +14,12 @@ namespace CheckersFinal
         public Cell()
         {
             checker = null;
-        }
-        public bool available=true;
-        public bool available2move = false;
-        public bool available2fight = false;
+            available = true;
+            available2move = false;
+            available2fight = false;
+    }
+        public bool available;
+        public bool available2move;
+        public bool available2fight;
     }
 }

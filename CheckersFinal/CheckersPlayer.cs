@@ -28,17 +28,19 @@ namespace CheckersFinal
                     cell2move = Console.ReadLine();
                     if (Utilities.Check2ndClick(team, ref Board, checkerName, cell2move)==true)
                     {
-                        Board.MakeMove(checkerName, cell2move);
+                        Board.MakeMove(checkerName, cell2move,team);
                         return true;
                     }
                     else
                     {
-                        Console.WriteLine("Ошибка, клетка недоступна, попробуйте заново сделать ход");
+                        Console.WriteLine("Ошибка, попробуйте заново сделать ход");
+                        
                     }
                 }
                 else
                 {
                     Console.WriteLine("Ошибка, попробуйте заново сделать ход ");
+                    Board.nullAtributes();
                 }
 
 

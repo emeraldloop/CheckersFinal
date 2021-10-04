@@ -34,6 +34,7 @@ namespace CheckersFinal
             while (!currentPlayer.MakeMove(ref board))
             {
                 Console.WriteLine("Not available move, try again ");
+                board.nullAtributes();
                 ShowBoard();
             }
 
