@@ -105,6 +105,7 @@ namespace CheckersFinal
         }
         public static bool Check2ndClick(string team, ref CheckersBoard board, string checkerName, string cellName)
         {
+
             if (board.jumpneed == true && GetCell(ref board,cellName).available2fight == true)
             {
                 return true;
@@ -128,12 +129,12 @@ namespace CheckersFinal
 
         static bool CheckFights(ref CheckersBoard board, string team, string checkerName)
         {
-            if (   CheckWay4Fights(ref board.GoldWay, team,checkerName) || CheckWay4Fights(ref board.DoubleWay_g8a2, team, checkerName)
-                || CheckWay4Fights(ref board.DoubleWay_h7b1, team, checkerName) || CheckWay4Fights(ref board.TripleWay_a6f1, team, checkerName)
-                || CheckWay4Fights(ref board.TripleWay_c8h3,team, checkerName)
-                || CheckWay4Fights(ref board.TripleWay_c8a6,team, checkerName) || CheckWay4Fights(ref board.TripleWay_h3f1, team, checkerName) 
-                || CheckWay4Fights(ref board.UltraWay_e8a4,team, checkerName)  || CheckWay4Fights(ref board.UltraWay_h5d1,team, checkerName)
-                || CheckWay4Fights(ref board.UltraWay_a4d1, team, checkerName) || CheckWay4Fights(ref board.UltraWay_e8h5, team, checkerName))
+            if (   CheckWay4Fights(ref board.GoldWay, team,checkerName) | CheckWay4Fights(ref board.DoubleWay_g8a2, team, checkerName)
+                | CheckWay4Fights(ref board.DoubleWay_h7b1, team, checkerName) | CheckWay4Fights(ref board.TripleWay_a6f1, team, checkerName)
+                | CheckWay4Fights(ref board.TripleWay_c8h3,team, checkerName) 
+                | CheckWay4Fights(ref board.TripleWay_c8a6,team, checkerName) | CheckWay4Fights(ref board.TripleWay_h3f1, team, checkerName) 
+                | CheckWay4Fights(ref board.UltraWay_e8a4,team, checkerName)  | CheckWay4Fights(ref board.UltraWay_h5d1,team, checkerName)
+                | CheckWay4Fights(ref board.UltraWay_a4d1, team, checkerName) | CheckWay4Fights(ref board.UltraWay_e8h5, team, checkerName))
             {
                 return true;
             }
@@ -144,10 +145,7 @@ namespace CheckersFinal
         }
         private static bool CheckWay4Fights(ref Cell[] Way,string team,string checkerName)
         {
-            if(checkerName=="h5")
-            {
-                Console.ReadLine();
-            }
+
             for (int i=0;i<Way.Length-2;i++)
             {
                 if(Way[i].checker !=null)
@@ -189,7 +187,7 @@ namespace CheckersFinal
                                     if (Way[i].name == checkerName)
                                     {
                                         Way[i - 2].available2fight = true;
-                                        Way[i-1].checker.need2eat = true;
+                                        Way[i -1].checker.need2eat = true;
                                         Way[i].checker.mustEat = true;
                                     }
                                     return true;
@@ -211,11 +209,11 @@ namespace CheckersFinal
         }
         static bool CheckPossibility2Move(ref CheckersBoard board,string checkerName)
         {
-            if (CheckWay4Moves(ref board,ref board.GoldWay, checkerName) || CheckWay4Moves(ref board, ref board.DoubleWay_g8a2, checkerName)
-                || CheckWay4Moves(ref board, ref board.DoubleWay_h7b1, checkerName) || CheckWay4Moves(ref board, ref board.TripleWay_a6f1, checkerName)
-                || CheckWay4Moves(ref board, ref board.TripleWay_c8h3, checkerName) || CheckWay4Moves(ref board, ref board.TripleWay_h3f1, checkerName)
-                || CheckWay4Moves(ref board, ref board.UltraWay_a4d1, checkerName)  || CheckWay4Moves(ref board, ref board.UltraWay_e8a4, checkerName)
-                || CheckWay4Moves(ref board, ref board.UltraWay_h5d1, checkerName)  || CheckWay4Moves(ref board,ref board.UltraWay_e8h5, checkerName))
+            if (  CheckWay4Moves(ref board,ref board.GoldWay, checkerName) | CheckWay4Moves(ref board, ref board.DoubleWay_g8a2, checkerName)
+                | CheckWay4Moves(ref board, ref board.DoubleWay_h7b1, checkerName) | CheckWay4Moves(ref board, ref board.TripleWay_a6f1, checkerName)
+                | CheckWay4Moves(ref board, ref board.TripleWay_c8h3, checkerName) | CheckWay4Moves(ref board, ref board.TripleWay_h3f1, checkerName) | CheckWay4Moves(ref board, ref board.TripleWay_c8a6, checkerName)
+                | CheckWay4Moves(ref board, ref board.UltraWay_a4d1, checkerName)  | CheckWay4Moves(ref board, ref board.UltraWay_e8a4, checkerName)
+                | CheckWay4Moves(ref board, ref board.UltraWay_h5d1, checkerName)  | CheckWay4Moves(ref board,ref board.UltraWay_e8h5, checkerName))
             {
                 return true;
             }
@@ -223,6 +221,8 @@ namespace CheckersFinal
         }
         private static bool CheckWay4Moves(ref CheckersBoard board, ref Cell[] Way, string checkerName)
         {
+            
+
             if(GetCell(ref board,checkerName).checker.team=="white")
             {
                 for (int i = 0; i < Way.Length - 1; i++)
@@ -261,10 +261,6 @@ namespace CheckersFinal
             }
             return false;
 
-        }
-        static bool CheckCell2Move(string cellName)
-        {
-            return true;
         }
 
         public static ref Cell GetCell(ref CheckersBoard board, string cellName)

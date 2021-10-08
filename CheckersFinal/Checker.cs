@@ -8,8 +8,11 @@ namespace CheckersFinal
 {
     class Checker
     {
-        public Checker(string team)
+        public Checker(string team,int x,int y)
         {
+            this.x = x;
+            this.y = y;
+            name = Utilities.GetXLetter(x) + y;
             this.team = team;
             need2eat = false;
             queen = false;

@@ -37,7 +37,7 @@ namespace CheckersFinal
                 board.nullAtributes();
                 ShowBoard();
             }
-
+            board.nullAtributes();
             currentPlayer = (currentPlayer == blackPlayer) ? whitePlayer : blackPlayer;
         }
 

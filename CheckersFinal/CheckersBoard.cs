@@ -75,19 +75,13 @@ namespace CheckersFinal
                 {
                     if( (cells[i,j].y==1 || cells[i,j].y==3) && (cells[i, j].x==2 || cells[i, j].x == 4 || cells[i, j].x == 6 || cells[i, j].x == 8))
                     {
-                        cells[i, j].checker = new Checker("black");
-                        cells[i, j].checker.x = cells[i, j].x;
-                        cells[i, j].checker.y = cells[i, j].y;
-                        cells[i, j].checker.name = Utilities.GetXLetter(cells[i, j].x)+ cells[i, j].y;
+                        cells[i, j].checker = new Checker("black", j + 1, i + 1);
                         cells[i, j].available = true;
                         continue;
                     }
                     if(cells[i,j].y==2 && (cells[i,j].x==1 || cells[i,j].x==3 || cells[i, j].x == 5 || cells[i, j].x == 7))
                     {
-                        cells[i, j].checker = new Checker("black");
-                        cells[i, j].checker.x = cells[i, j].x;
-                        cells[i, j].checker.y = cells[i, j].y;
-                        cells[i, j].checker.name = Utilities.GetXLetter(cells[i, j].x) + cells[i, j].y;
+                        cells[i, j].checker = new Checker("black", j + 1, i + 1);
                         cells[i, j].available = true;
                         continue;
                     }
@@ -105,19 +99,13 @@ namespace CheckersFinal
                     }
                     if ((cells[i, j].y == 6 || cells[i, j].y == 8) && (cells[i, j].x == 1 || cells[i, j].x == 3 || cells[i, j].x == 5 || cells[i, j].x == 7))
                     {
-                        cells[i, j].checker = new Checker("white");
-                        cells[i, j].checker.x = cells[i, j].x;
-                        cells[i, j].checker.y = cells[i, j].y;
-                        cells[i, j].checker.name = Utilities.GetXLetter(cells[i, j].x) + cells[i, j].y;
+                        cells[i, j].checker = new Checker("white", j + 1, i + 1);
                         cells[i, j].available = true;
                         continue;
                     }
                     if (cells[i, j].y == 7 && (cells[i, j].x == 2 || cells[i, j].x == 4 || cells[i, j].x == 6 || cells[i, j].x == 8))
                     {
-                        cells[i, j].checker = new Checker("white");
-                        cells[i, j].checker.x = cells[i, j].x;
-                        cells[i, j].checker.y = cells[i, j].y;
-                        cells[i, j].checker.name = Utilities.GetXLetter(cells[i, j].x) + cells[i, j].y;
+                        cells[i, j].checker = new Checker("white", j + 1, i + 1);
                         cells[i, j].available = true;
                         continue;
                     }
@@ -156,28 +144,47 @@ namespace CheckersFinal
         {
             if(jumpneed==true)
             {
-                for(int i=0;i<8;i++)
+                /*for(int i=0;i<8;i++) // исправить?
                 {
                     for(int j=0;j<8;j++)
                     {
                         if(cells[i,j].checker!=null)
                         {
-                            if (cells[i, j].checker.mustEat == true)
+                            if (cells[i, j].checker.mustEat == true && cells[i, j].checker.name == checkerName)
+                            {
                                 cells[i, j].checker = null;
+                                continue;
+                            }
                             if (cells[i, j].checker.need2eat == true)
+                            {
                                 cells[i, j].checker = null;
+                                continue;
+                            }
                         }
-                        if (cells[i, j].available2fight == true)
-                            cells[i, j].checker = new Checker(team);
+                        if (cells[i, j].available2fight == true && cells[i, j].checker.name ==cell2move)
+                            cells[i, j].checker = new Checker(team,j+1,i+1);
+                    }
+                }*/
+                GoWays(checkerName, cell2move, team);
+            }
+            else 
+            {
+                for(int i=0;i<8;i++)
+                {
+                    for(int j=0;j<8;j++)
+                    {
+                        if(cells[i,j].checker!=null&& cells[i, j].checker.name==checkerName)
+                        {
+                            cells[i, j].checker = null;
+                        }
+                        if(cells[i, j].name ==cell2move)
+                        {
+                            cells[i, j].checker = new Checker(team, j + 1, i + 1);
+                        }
 
 
                     }
                 }
-            }
-            else
-            {
-                GetCell(checkerName).checker = null;
-                GetCell(cell2move).checker = new Checker(team);
 
 
             }
@@ -200,20 +207,12 @@ namespace CheckersFinal
             Console.WriteLine("Ошибка, клетки с таким именем не существует");
             return ref cells[0, 0]; //костыль
         }
-        public void nullAtributes()// надо исправить 
+        public void nullAtributes()
         {
             for (int i = 0; i < 8; i++)
             {
                 for (int j = 0; j < 8; j++)
                 {
-                    
-
-
-
-
-
-
-
                     cells[i, j].available2fight = false;
                     cells[i, j].available2move = false;
                     if(cells[i,j].checker!=null)
@@ -223,6 +222,54 @@ namespace CheckersFinal
                     }
                 }
             }
+        }
+        private void GoWays(string checkerName,string cellName,string team)
+        {
+            if(goWay(ref GoldWay,team,checkerName,cellName) || goWay(ref DoubleWay_g8a2, team, checkerName, cellName)
+                || goWay(ref DoubleWay_h7b1, team, checkerName, cellName) || goWay(ref TripleWay_a6f1, team, checkerName, cellName)
+                || goWay(ref TripleWay_c8a6, team, checkerName, cellName) || goWay(ref TripleWay_c8h3, team, checkerName, cellName)
+                || goWay(ref TripleWay_h3f1, team, checkerName, cellName) || goWay(ref UltraWay_a4d1, team, checkerName, cellName)
+                || goWay(ref UltraWay_e8a4, team, checkerName, cellName)  || goWay(ref UltraWay_e8h5, team, checkerName, cellName)
+                || goWay(ref UltraWay_h5d1, team, checkerName, cellName))
+            {
+
+            }
+            else
+            {
+                Console.WriteLine("Ошибка");
+            }
+
+        }
+        private bool goWay(ref Cell[] Way,string team, string checkerName, string cellName)
+        {
+            for (int i = 0; i < Way.Length - 2; i++)
+            {
+                if(Way[i].checker!=null&& Way[i].checker.name==checkerName)
+                {
+                    if(Way[i+2].name==cellName && Way[i+1].checker!=null && Way[i+1].checker.need2eat==true)
+                    {
+                        Way[i].checker = null;
+                        Way[i + 1].checker = null;
+                        Way[i + 2].checker = new Checker(team, Way[i + 2].x, Way[i + 2].y);
+                        return true;
+                    }
+                }
+            }
+            for (int i = Way.Length - 1; i > 1; i--)
+            {
+                if (Way[i].checker != null && Way[i].checker.name == checkerName)
+                {
+                    if (Way[i - 2].name == cellName && Way[i - 1].checker != null && Way[i - 1].checker.need2eat == true)
+                    {
+                        Way[i].checker = null;
+                        Way[i - 1].checker = null;
+                        Way[i - 2].checker = new Checker(team, Way[i - 2].x, Way[i - 2].y);
+                        return true;
+                    }
+                }
+
+            }
+            return false;
         }
 
     }

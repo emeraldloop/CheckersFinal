@@ -20,6 +20,8 @@ namespace CheckersFinal
         {
             while (true)
             {
+                
+
                 Console.WriteLine("Ход команды {0}, укажите шашку ", team);
                 checkerName = Console.ReadLine();
                 if (Utilities.Check1stClick(team,ref Board,checkerName)==true)
@@ -34,7 +36,7 @@ namespace CheckersFinal
                     else
                     {
                         Console.WriteLine("Ошибка, попробуйте заново сделать ход");
-                        
+                        Board.nullAtributes();
                     }
                 }
                 else
