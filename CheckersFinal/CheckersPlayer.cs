@@ -20,6 +20,8 @@ namespace CheckersFinal
         {
             while (true)
             {
+                
+
                 Console.WriteLine("Ход команды {0}, укажите шашку ", team);
                 checkerName = Console.ReadLine();
                 if (Utilities.Check1stClick(team,ref Board,checkerName)==true)
@@ -28,17 +30,19 @@ namespace CheckersFinal
                     cell2move = Console.ReadLine();
                     if (Utilities.Check2ndClick(team, ref Board, checkerName, cell2move)==true)
                     {
-                        Board.MakeMove(checkerName, cell2move);
+                        Board.MakeMove(checkerName, cell2move,team);
                         return true;
                     }
                     else
                     {
-                        Console.WriteLine("Ошибка, клетка недоступна, попробуйте заново сделать ход");
+                        Console.WriteLine("Ошибка, попробуйте заново сделать ход");
+                        Board.nullAtributes();
                     }
                 }
                 else
                 {
                     Console.WriteLine("Ошибка, попробуйте заново сделать ход ");
+                    Board.nullAtributes();
                 }
 
 
