@@ -139,12 +139,16 @@ namespace CheckersFinal
             }
             return builder.ToString();
         }
-        public void MakeMove(string checkerName, string cell2move,string team)
+        public bool MakeMove(string checkerName, string cell2move,string team)
         {
             if(jumpneed==true)
             {
-                GoWays(checkerName, cell2move, team);
-                
+                if (GoWays(checkerName, cell2move, team))
+                {
+                    return true;
+                }
+                else
+                    return false;
             }
             else 
             {
@@ -169,12 +173,13 @@ namespace CheckersFinal
                                     cells[i, j].checker.queen = true;
                             }
                             GetCell(checkerName).checker = null;
+                            return true;
                         }
                         
                     }
                 }
             }
-
+            return false;
 
         }
         public ref Cell GetCell( string cellName)
@@ -209,7 +214,7 @@ namespace CheckersFinal
                 }
             }
         }
-        private void GoWays(string checkerName,string cellName,string team)//for fights
+        private bool GoWays(string checkerName,string cellName,string team)//for fights
         {
             if(goWay(ref GoldWay,team,checkerName,cellName) || goWay(ref DoubleWay_g8a2, team, checkerName, cellName)
                 || goWay(ref DoubleWay_h7b1, team, checkerName, cellName) || goWay(ref TripleWay_a6f1, team, checkerName, cellName)
@@ -218,11 +223,11 @@ namespace CheckersFinal
                 || goWay(ref UltraWay_e8a4, team, checkerName, cellName)  || goWay(ref UltraWay_e8h5, team, checkerName, cellName)
                 || goWay(ref UltraWay_h5d1, team, checkerName, cellName))
             {
-
+                return true;
             }
             else
             {
-                Console.WriteLine("Ошибка");
+                return false;
             }
 
         }

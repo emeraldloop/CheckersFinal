@@ -292,7 +292,7 @@ namespace CheckersFinal
                 }
                 if (team == "black")
                 {
-                    for (int i = Way.Length - 1; i > 1; i--)
+                    for (int i = Way.Length - 1; i > 0; i--)
                     {
                         if (Way[i].checker != null && Way[i].checker.name == checkerName && Way[i - 1].checker == null)
                         {

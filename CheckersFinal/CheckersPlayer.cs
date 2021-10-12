@@ -30,8 +30,13 @@ namespace CheckersFinal
                     cell2move = Console.ReadLine();
                     if (Utilities.Check2ndClick(team, ref Board, checkerName, cell2move)==true)
                     {
-                        Board.MakeMove(checkerName, cell2move,team);
+                        if(Board.MakeMove(checkerName, cell2move,team))
                         return true;
+                        else
+                        {
+                            Console.WriteLine("Ошибка, ход не сделан");
+                            return false;
+                        }
                     }
                     else
                     {
