@@ -26,7 +26,6 @@ namespace CheckersFinal
             CreateCells();
             CreateCheckers();
             CreateWays();
-            ShowBoard();
         }
 
         private void CreateWays()
@@ -144,28 +143,8 @@ namespace CheckersFinal
         {
             if(jumpneed==true)
             {
-                /*for(int i=0;i<8;i++) // исправить?
-                {
-                    for(int j=0;j<8;j++)
-                    {
-                        if(cells[i,j].checker!=null)
-                        {
-                            if (cells[i, j].checker.mustEat == true && cells[i, j].checker.name == checkerName)
-                            {
-                                cells[i, j].checker = null;
-                                continue;
-                            }
-                            if (cells[i, j].checker.need2eat == true)
-                            {
-                                cells[i, j].checker = null;
-                                continue;
-                            }
-                        }
-                        if (cells[i, j].available2fight == true && cells[i, j].checker.name ==cell2move)
-                            cells[i, j].checker = new Checker(team,j+1,i+1);
-                    }
-                }*/
                 GoWays(checkerName, cell2move, team);
+                
             }
             else 
             {
@@ -173,20 +152,27 @@ namespace CheckersFinal
                 {
                     for(int j=0;j<8;j++)
                     {
-                        if(cells[i,j].checker!=null&& cells[i, j].checker.name==checkerName)
-                        {
-                            cells[i, j].checker = null;
-                        }
                         if(cells[i, j].name ==cell2move)
-                        {
-                            cells[i, j].checker = new Checker(team, j + 1, i + 1);
+                        {   
+                            if (GetCell(checkerName).checker!=null&&GetCell(checkerName).checker.queen==true)
+                            {
+                                cells[i, j].checker = new Checker(team, j + 1, i + 1);
+                                cells[i, j].checker.queen = true;
+
+                            }
+                            else
+                            {
+                                cells[i, j].checker = new Checker(team, j + 1, i + 1);
+                                if (cells[i, j].y == 1 && (cells[i, j].x == 2 || cells[i, j].x == 4 || cells[i, j].x == 6 || cells[i, j].x == 8))
+                                    cells[i, j].checker.queen = true;
+                                if (cells[i, j].y == 8 && (cells[i, j].x == 1 || cells[i, j].x == 3 || cells[i, j].x == 5 || cells[i, j].x == 7))
+                                    cells[i, j].checker.queen = true;
+                            }
+                            GetCell(checkerName).checker = null;
                         }
-
-
+                        
                     }
                 }
-
-
             }
 
 
@@ -223,7 +209,7 @@ namespace CheckersFinal
                 }
             }
         }
-        private void GoWays(string checkerName,string cellName,string team)
+        private void GoWays(string checkerName,string cellName,string team)//for fights
         {
             if(goWay(ref GoldWay,team,checkerName,cellName) || goWay(ref DoubleWay_g8a2, team, checkerName, cellName)
                 || goWay(ref DoubleWay_h7b1, team, checkerName, cellName) || goWay(ref TripleWay_a6f1, team, checkerName, cellName)
@@ -240,17 +226,41 @@ namespace CheckersFinal
             }
 
         }
-        private bool goWay(ref Cell[] Way,string team, string checkerName, string cellName)
+        private bool goWay(ref Cell[] Way,string team, string checkerName, string cellName) //must fix!!!
         {
             for (int i = 0; i < Way.Length - 2; i++)
             {
                 if(Way[i].checker!=null&& Way[i].checker.name==checkerName)
                 {
+                    if(Way[i].checker.queen==true)
+                    {
+                        for (int j = i; j < Way.Length; j++)
+                        {
+                            if(Way[j].name==cellName)
+                            {
+                                Way[j].checker = new Checker(team, Way[j].x, Way[j].y);
+                                Way[j].checker.queen = true;
+                                Way[j - 1].checker = null;
+                                Way[i].checker = null;
+                                if (Way[j].y == 1 && (Way[j].x == 2 || Way[j].x == 4 || Way[j].x == 6 || Way[j].x == 8))
+                                    Way[j].checker.queen = true;
+                                if (Way[j].y == 8 && (Way[j].x == 1 || Way[j].x == 3 || Way[j].x == 5 || Way[j].x == 7))
+                                    Way[j].checker.queen = true;
+                                return true;
+                            }
+                        }
+
+                    }
+                    else
                     if(Way[i+2].name==cellName && Way[i+1].checker!=null && Way[i+1].checker.need2eat==true)
                     {
+                        Way[i + 2].checker = new Checker(team, Way[i + 2].x, Way[i + 2].y);
                         Way[i].checker = null;
                         Way[i + 1].checker = null;
-                        Way[i + 2].checker = new Checker(team, Way[i + 2].x, Way[i + 2].y);
+                        if (Way[i+2].y == 1 && (Way[i+2].x == 2 || Way[i+2].x == 4 || Way[i+2].x == 6 || Way[i+2].x == 8))
+                            Way[i+2].checker.queen = true;
+                        if (Way[i+2].y == 8 && (Way[i+2].x == 1 || Way[i+2].x == 3 || Way[i+2].x == 5 || Way[i+2].x == 7))
+                            Way[i+2].checker.queen = true;
                         return true;
                     }
                 }
@@ -259,11 +269,36 @@ namespace CheckersFinal
             {
                 if (Way[i].checker != null && Way[i].checker.name == checkerName)
                 {
+                    if(Way[i].checker.queen==true)
+                    {
+                        for (int j = i; j >= 0; j--)
+                        {
+                            if (Way[j].name == cellName)
+                            {
+                                Way[j].checker = new Checker(team, Way[j].x, Way[j].y);
+                                Way[j].checker.queen = true;
+                                Way[j + 1].checker = null;
+                                Way[i].checker = null;
+                                if (Way[j].y == 1 && (Way[j].x == 2 || Way[j].x == 4 || Way[j].x == 6 || Way[j].x == 8))
+                                    Way[j].checker.queen = true;
+                                if (Way[j].y == 8 && (Way[j].x == 1 || Way[j].x == 3 || Way[j].x == 5 || Way[j].x == 7))
+                                    Way[j].checker.queen = true;
+                                return true;
+                            }
+                        }
+                    }
+                    else
                     if (Way[i - 2].name == cellName && Way[i - 1].checker != null && Way[i - 1].checker.need2eat == true)
                     {
+                        
+                        Way[i - 2].checker = new Checker(team, Way[i - 2].x, Way[i - 2].y);
                         Way[i].checker = null;
                         Way[i - 1].checker = null;
-                        Way[i - 2].checker = new Checker(team, Way[i - 2].x, Way[i - 2].y);
+                        
+                        if (Way[i-2].y == 1 && (Way[i-2].x == 2 || Way[i-2].x == 4 || Way[i-2].x == 6 || Way[i-2].x == 8))
+                            Way[i-2].checker.queen = true;
+                        if (Way[i-2].y == 8 && (Way[i-2].x == 1 || Way[i-2].x == 3 || Way[i-2].x == 5 || Way[i-2].x == 7))
+                            Way[i-2].checker.queen = true;
                         return true;
                     }
                 }

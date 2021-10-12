@@ -20,7 +20,7 @@ namespace CheckersFinal
         {
             while (true)
             {
-                
+                Console.WriteLine("0 - дамка белых, O - дамка черных");
 
                 Console.WriteLine("Ход команды {0}, укажите шашку ", team);
                 checkerName = Console.ReadLine();

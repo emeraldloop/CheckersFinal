@@ -58,11 +58,17 @@ namespace CheckersFinal
 
             if (cell.checker != null && cell.checker.team == "white")
             {
+                if (cell.checker.queen == true)
+                    return '0';
+                else
                 return 'W';
             }
             if (cell.checker != null && cell.checker.team == "black")
             {
-                return 'B';
+                if (cell.checker.queen == true)
+                    return 'O';
+                else
+                    return 'B';
             }
 
             return '?';
@@ -89,7 +95,7 @@ namespace CheckersFinal
                 else
                 {
                     board.jumpneed = false;
-                    if (CheckPossibility2Move(ref board,checkerName) == true)
+                    if (CheckPossibility2Move(ref board,checkerName,team) == true)
                     {
                         Console.WriteLine("Эта шашка может ходить");
                         return true;
@@ -145,59 +151,77 @@ namespace CheckersFinal
         }
         private static bool CheckWay4Fights(ref Cell[] Way,string team,string checkerName)
         {
-
-            for (int i=0;i<Way.Length-2;i++)
+            bool result = false;
+            for (int i=0;i<Way.Length-1;i++)
             {
-                if(Way[i].checker !=null)
+                if(Way[i].checker !=null && Way[i].checker.team == team)
                 {
-                    if (Way[i].checker.team==team)
+                     if(Way[i].checker.queen==true) //if checker is queen
+                     { 
+                         for(int j=i;j<Way.Length-1;j++)
+                         {
+                             if(Way[j].checker!=null&&Way[j].checker.team!=team&&Way[j+1].checker==null)
+                             {
+                                 if (Way[i].name == checkerName)
+                                 {
+                                     Way[i].checker.mustEat = true;
+                                     Way[j].checker.need2eat = true;
+                                     Way[j + 1].available2fight = true;
+                                 }
+                                result = true;
+                             }
+                         }
+                     }
+                    else //not queen
+                    if (Way[i+1].checker !=null&&Way[i + 1].checker.team != team && Way[i + 2].checker == null) 
                     {
-                        if(Way[i+1].checker !=null)
-                        {
-                            if (Way[i+1].checker.team!=team)
-                            {
-                                if (Way[i + 2].checker == null)
-                                {
-                                    if(Way[i].name==checkerName)
-                                    {
-                                        Way[i + 2].available2fight = true;
-                                        Way[i + 1].checker.need2eat = true;
-                                        Way[i].checker.mustEat = true;
-                                    }
-                                    return true;
-                                }
-                            }
-                        }
+                         if(Way[i].name==checkerName)
+                         {
+                             Way[i + 2].available2fight = true;
+                             Way[i + 1].checker.need2eat = true;
+                             Way[i].checker.mustEat = true;
+                         }
+                        result = true;
                     }
+                    
                 }
             }
 
             for (int i=Way.Length-1;i>1;i--)
             {
-                if(Way[i].checker!=null)
+                if (Way[i].checker != null && Way[i].checker.team == team)
                 {
-                    if(Way[i].checker.team==team)
+                    if (Way[i].checker.queen == true) //if checker is queen
                     {
-                        if(Way[i-1].checker != null)
+                        for (int j = i; j > 1; j--)
                         {
-                            if(Way[i-1].checker.team!=team)
+                            if (Way[j].checker != null && Way[j].checker.team != team && Way[j - 1].checker == null)
                             {
-                                if (Way[i - 2].checker == null)
+                                if (Way[i].name == checkerName)
                                 {
-                                    if (Way[i].name == checkerName)
-                                    {
-                                        Way[i - 2].available2fight = true;
-                                        Way[i -1].checker.need2eat = true;
-                                        Way[i].checker.mustEat = true;
-                                    }
-                                    return true;
-                                }                           
+                                    Way[i].checker.mustEat = true;
+                                    Way[j].checker.need2eat = true;
+                                    Way[j - 1].available2fight = true;
+                                }
+                                result = true;
                             }
                         }
                     }
+                    else //not queen
+                       if (Way[i - 1].checker != null && Way[i - 1].checker.team != team && Way[i - 2].checker == null)
+                    {
+                        if (Way[i].name == checkerName)
+                        {
+                            Way[i - 2].available2fight = true;
+                            Way[i - 1].checker.need2eat = true;
+                            Way[i].checker.mustEat = true;
+                        }
+                        result = true;
+                    }
+
                 }
             }
-            return false;
+            return result;
         }
         
         static bool CheckPossibility2Fight(CheckersBoard board,string checkername)
@@ -207,60 +231,78 @@ namespace CheckersFinal
             else
                 return false;
         }
-        static bool CheckPossibility2Move(ref CheckersBoard board,string checkerName)
+        static bool CheckPossibility2Move(ref CheckersBoard board,string checkerName,string team)
         {
-            if (  CheckWay4Moves(ref board,ref board.GoldWay, checkerName) | CheckWay4Moves(ref board, ref board.DoubleWay_g8a2, checkerName)
-                | CheckWay4Moves(ref board, ref board.DoubleWay_h7b1, checkerName) | CheckWay4Moves(ref board, ref board.TripleWay_a6f1, checkerName)
-                | CheckWay4Moves(ref board, ref board.TripleWay_c8h3, checkerName) | CheckWay4Moves(ref board, ref board.TripleWay_h3f1, checkerName) | CheckWay4Moves(ref board, ref board.TripleWay_c8a6, checkerName)
-                | CheckWay4Moves(ref board, ref board.UltraWay_a4d1, checkerName)  | CheckWay4Moves(ref board, ref board.UltraWay_e8a4, checkerName)
-                | CheckWay4Moves(ref board, ref board.UltraWay_h5d1, checkerName)  | CheckWay4Moves(ref board,ref board.UltraWay_e8h5, checkerName))
+            if (  CheckWay4Moves(ref board,ref board.GoldWay,checkerName,team) | CheckWay4Moves(ref board, ref board.DoubleWay_g8a2,checkerName,team)
+                | CheckWay4Moves(ref board, ref board.DoubleWay_h7b1, checkerName, team) | CheckWay4Moves(ref board, ref board.TripleWay_a6f1,checkerName,team)
+                | CheckWay4Moves(ref board, ref board.TripleWay_c8h3, checkerName, team) | CheckWay4Moves(ref board, ref board.TripleWay_h3f1,checkerName,team) | CheckWay4Moves(ref board, ref board.TripleWay_c8a6,checkerName,team)
+                | CheckWay4Moves(ref board, ref board.UltraWay_a4d1, checkerName, team) | CheckWay4Moves(ref board, ref board.UltraWay_e8a4, checkerName, team)
+                | CheckWay4Moves(ref board, ref board.UltraWay_h5d1, checkerName, team) | CheckWay4Moves(ref board,ref board.UltraWay_e8h5, checkerName, team))
             {
                 return true;
             }
             return false;
         }
-        private static bool CheckWay4Moves(ref CheckersBoard board, ref Cell[] Way, string checkerName)
+        private static bool CheckWay4Moves(ref CheckersBoard board, ref Cell[] Way, string checkerName,string team)
         {
-            
-
-            if(GetCell(ref board,checkerName).checker.team=="white")
-            {
+            bool result = false;
+            if (GetCell(ref board, checkerName).checker != null && GetCell(ref board, checkerName).checker.queen == true)
+            {//if checker is queen
                 for (int i = 0; i < Way.Length - 1; i++)
                 {
-                    if (Way[i].checker != null)
+                    if (Way[i].name == checkerName)
                     {
-                        if (Way[i].checker.name == checkerName)
+                        for (int j = i + 1; j < Way.Length; j++)
                         {
-                            if (Way[i + 1].checker == null)
+                            if (Way[j].checker == null)
                             {
-                                Way[i + 1].available2move = true;
-
-                                return true;
+                                Way[j].available2move = true;
+                                result = true;
                             }
                         }
                     }
                 }
-            }
-            if(GetCell(ref board, checkerName).checker.team == "black")
-            {
-                for (int i = Way.Length - 1; i > 1; i--)
+                for (int i = Way.Length - 1; i > 0; i--)
                 {
-                    if (Way[i].checker != null)
+                    if (Way[i].name == checkerName)
                     {
-                        if (Way[i].checker.name == checkerName)
+                        for (int j = i - 1; j > -1; j--)
                         {
-                            if (Way[i - 1].checker == null)
+                            if (Way[j].checker == null)
                             {
-                                Way[i - 1].available2move = true;
-
-                                return true;
+                                Way[j].available2move = true;
+                                result = true;
                             }
                         }
                     }
                 }
             }
-            return false;
-
+            else //if checker is not queen
+            {
+                if (team == "white")
+                {
+                    for (int i = 0; i < Way.Length - 1; i++)
+                    {
+                        if (Way[i].checker != null && Way[i].checker.name == checkerName && Way[i + 1].checker == null)
+                        {
+                            Way[i + 1].available2move = true;
+                            result = true;
+                        }
+                    }
+                }
+                if (team == "black")
+                {
+                    for (int i = Way.Length - 1; i > 1; i--)
+                    {
+                        if (Way[i].checker != null && Way[i].checker.name == checkerName && Way[i - 1].checker == null)
+                        {
+                            Way[i - 1].available2move = true;
+                            result=true;
+                        }
+                    }
+                }
+            }
+            return result;
         }
 
         public static ref Cell GetCell(ref CheckersBoard board, string cellName)
