@@ -41,6 +41,10 @@ namespace CheckersFinal
             currentPlayer = (currentPlayer == blackPlayer) ? whitePlayer : blackPlayer;
         }
 
+        public bool CheckWin()
+        {
+            return board.IsWin();
+        }
 
 
     }

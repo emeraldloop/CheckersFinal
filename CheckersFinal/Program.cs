@@ -13,7 +13,10 @@ namespace CheckersFinal
             while (true)
             {
                 manager.MakeMove();
+                if (manager.CheckWin() == true)
+                    break;
             }
+            Console.WriteLine("Игра окончена");
         }
     }
 }

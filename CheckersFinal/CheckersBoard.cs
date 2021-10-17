@@ -10,9 +10,9 @@ namespace CheckersFinal
     {
         public Cell[,] cells;
         public bool jumpneed;
-        public Cell[] GoldWay = new Cell[8];
-        public Cell[] DoubleWay_h7b1 = new Cell[7];
-        public Cell[] DoubleWay_g8a2 = new Cell[7];
+        public Cell[] GoldWay = new Cell[8];       // Way - это одна из диагоналей по которым едят/ходят шашки
+        public Cell[] DoubleWay_h7b1 = new Cell[7];// Way нужны для проверки доски на бои, свободные ходы
+        public Cell[] DoubleWay_g8a2 = new Cell[7];// Каждый путь содержит ссылки на клетки доски
         public Cell[] TripleWay_h3f1 = new Cell[3];
         public Cell[] TripleWay_c8a6 = new Cell[3];
         public Cell[] TripleWay_a6f1 = new Cell[6];
@@ -21,6 +21,8 @@ namespace CheckersFinal
         public Cell[] UltraWay_e8a4  = new Cell[5];
         public Cell[] UltraWay_a4d1  = new Cell[4];
         public Cell[] UltraWay_e8h5  = new Cell[4];
+        public Cell[] miniDoubleWay_a2b1 = new Cell[2];//два пути ниже участвуют только в ходах
+        public Cell[] miniDoubleWay_g8h7 = new Cell[2];
         public CheckersBoard()
         {
             CreateCells();
@@ -41,6 +43,8 @@ namespace CheckersFinal
             UltraWay_h5d1  = new Cell[] { GetCell("h5"), GetCell("g4"), GetCell("f3"), GetCell("e2"), GetCell("d1") };
             UltraWay_a4d1  = new Cell[] { GetCell("a4"), GetCell("b3"), GetCell("c2"), GetCell("d1") };
             UltraWay_e8h5  = new Cell[] { GetCell("e8"), GetCell("f7"), GetCell("g6"), GetCell("h5") };
+            miniDoubleWay_a2b1 = new Cell[] { GetCell("a2"), GetCell("b1") };
+            miniDoubleWay_g8h7 = new Cell[] { GetCell("g8"), GetCell("h7") };
         }
 
         public void CreateCells()
@@ -72,37 +76,37 @@ namespace CheckersFinal
             {
                 for (int j = 0; j < 8; j++)
                 {
-                    if( (cells[i,j].y==1 || cells[i,j].y==3) && (cells[i, j].x==2 || cells[i, j].x == 4 || cells[i, j].x == 6 || cells[i, j].x == 8))
+                    if( (cells[i,j].y==1 || cells[i,j].y==3) && (cells[i, j].x%2==0))
                     {
                         cells[i, j].checker = new Checker("black", j + 1, i + 1);
                         cells[i, j].available = true;
                         continue;
                     }
-                    if(cells[i,j].y==2 && (cells[i,j].x==1 || cells[i,j].x==3 || cells[i, j].x == 5 || cells[i, j].x == 7))
+                    if(cells[i,j].y==2 && (cells[i,j].x%2!=0))
                     {
                         cells[i, j].checker = new Checker("black", j + 1, i + 1);
                         cells[i, j].available = true;
                         continue;
                     }
-                    if (cells[i, j].y==4 && (cells[i, j].x==1 || cells[i, j].x == 3 || cells[i, j].x == 5 || cells[i, j].x == 7))
+                    if (cells[i, j].y==4 && (cells[i, j].x%2!= 0))
                     {
                         cells[i, j].available = true;
                         cells[i, j].checker = null;
                         continue;
                     }
-                    if(cells[i, j].y == 5 && (cells[i, j].x == 2 || cells[i, j].x == 4 || cells[i, j].x == 6 || cells[i, j].x == 8))
+                    if(cells[i, j].y == 5 && (cells[i, j].x % 2 == 0))
                     {
                         cells[i, j].available = true;
                         cells[i, j].checker = null;
                         continue;
                     }
-                    if ((cells[i, j].y == 6 || cells[i, j].y == 8) && (cells[i, j].x == 1 || cells[i, j].x == 3 || cells[i, j].x == 5 || cells[i, j].x == 7))
+                    if ((cells[i, j].y == 6 || cells[i, j].y == 8) && (cells[i, j].x % 2 != 0))
                     {
                         cells[i, j].checker = new Checker("white", j + 1, i + 1);
                         cells[i, j].available = true;
                         continue;
                     }
-                    if (cells[i, j].y == 7 && (cells[i, j].x == 2 || cells[i, j].x == 4 || cells[i, j].x == 6 || cells[i, j].x == 8))
+                    if (cells[i, j].y == 7 && (cells[i, j].x % 2 == 0))
                     {
                         cells[i, j].checker = new Checker("white", j + 1, i + 1);
                         cells[i, j].available = true;
@@ -312,5 +316,34 @@ namespace CheckersFinal
             return false;
         }
 
+        public bool IsWin()
+        {
+            int white = 0;
+            int black = 0;
+            for(int i=0;i<8;i++)
+            {
+                for(int j=0;j<8;j++)
+                {
+                    if(cells[i,j].checker!=null)
+                    {
+                        if (cells[i, j].checker.team == "white")
+                            white++;
+                        else
+                            black++;
+                    }
+                }
+            }
+            if(white==0&&black>0)
+            {
+                Console.WriteLine("Черные выиграли");
+                return true;
+            }
+            if(black==0&&white>0)
+            {
+                Console.WriteLine("Белые выиграли");
+                return true;
+            }
+            return false;
+        }
     }
 }

@@ -23,8 +23,8 @@ namespace CheckersFinal
         public int x, y;
         public string team; //white / black
         public bool queen;
-        public bool need2eat;
-        public bool mustEat;
+        public bool need2eat; //шашка может быть съедена
+        public bool mustEat; //шашка должна есть
         
 
     }
