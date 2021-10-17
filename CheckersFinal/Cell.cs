@@ -8,15 +8,15 @@ namespace CheckersFinal
 {
     class Cell
     {
-        public string name;
+        public string name; 
         public int x, y;
         public Checker checker;
         public Cell()
         {
             checker = null;
-            available = true;
-            available2move = false;
-            available2fight = false;
+            available = true; // белые клетки false
+            available2move = false; //клетка доступна для хода на неё
+            available2fight = false; //клетка доступна для боя
     }
         public bool available;
         public bool available2move;
