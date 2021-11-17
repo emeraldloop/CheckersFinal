@@ -6,17 +6,17 @@ using System.Threading.Tasks;
 
 namespace CheckersFinal
 {
-    class CheckersPlayer
+    class CheckersPlayer:Player
     {
-        public string name;
-        public string team;
+        public new string name;
+        public new string team;
         string checkerName, cell2move;
 
         public CheckersPlayer(string team)
         {
             this.team = team;
         }
-        public bool MakeMove(ref CheckersBoard Board)
+        public override bool MakeMove(ref CheckersBoard Board)
         {
             bool firstmove = true;
             while (true)

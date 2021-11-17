@@ -9,16 +9,25 @@ namespace CheckersFinal
     class Manager
     {
         CheckersBoard board;
-        CheckersPlayer whitePlayer, blackPlayer, currentPlayer;
+        Player whitePlayer, blackPlayer, currentPlayer;
         public void Init()
         {
             board = new CheckersBoard();
             Console.WriteLine("Введите имя белого игрока");
             whitePlayer = new CheckersPlayer("white");
             whitePlayer.name = Console.ReadLine();
-            Console.WriteLine("Введите имя черного игрока");
-            blackPlayer = new CheckersPlayer("black");
-            blackPlayer.name = Console.ReadLine();
+            Console.WriteLine("Черный игрок - человек/бот? Человек - 1, бот - 2");
+            string mode = Console.ReadLine();
+            if (mode == "1")
+            {
+                Console.WriteLine("Введите имя черного игрока");
+                blackPlayer = new CheckersPlayer("black");
+                blackPlayer.name = Console.ReadLine();
+            }
+            if(mode=="2")
+            {
+                blackPlayer = new CompPlayer("black");
+            }
             currentPlayer = whitePlayer;
         }
         
@@ -41,10 +50,8 @@ namespace CheckersFinal
             currentPlayer = (currentPlayer == blackPlayer) ? whitePlayer : blackPlayer;
         }
 
-        public bool CheckWin()
-        {
-            return board.IsWin();
-        }
+        public bool CheckWin() => board.IsWin() == true;
+        
 
 
     }

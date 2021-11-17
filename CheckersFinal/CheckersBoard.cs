@@ -145,7 +145,7 @@ namespace CheckersFinal
         }
         public bool MakeMove(string checkerName, string cell2move,string team)
         {
-            if(jumpneed==true)
+            if(jumpneed==true) 
             {
                 if (GoWays(checkerName, cell2move, team))
                 {
@@ -154,7 +154,7 @@ namespace CheckersFinal
                 else
                     return false;
             }
-            else 
+            else // обычный ход
             {
                 for(int i=0;i<8;i++)
                 {
